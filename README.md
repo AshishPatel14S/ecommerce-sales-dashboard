@@ -116,4 +116,4 @@ Read the full write‑up here: **[`docs/case_study.md`](docs/case_study.md)**
 
 ## License
 
-MIT
+- MIT
