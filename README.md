@@ -117,5 +117,3 @@ Read the full write‑up here: **[`docs/case_study.md`](docs/case_study.md)**
 ## License
 
 MIT
-
-::contentReference[oaicite:0]{index=0}
