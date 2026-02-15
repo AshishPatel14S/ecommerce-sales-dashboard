@@ -19,8 +19,8 @@ Analyze **£9.7M** in transactions to uncover **revenue drivers, seasonality, an
 ### Option A — fastest (runs on included sample data)
 
 ```bash
-git clone <your-repo-url>
-cd 01-ecommerce-sales-dashboard
+git clone https://github.com/AshishPatel14S/ecommerce-sales-dashboard.git
+cd ecommerce-sales-dashboard
 
 make setup
 make sample
