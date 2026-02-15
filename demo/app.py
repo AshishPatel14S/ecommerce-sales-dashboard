@@ -444,7 +444,7 @@ def main():
     st.markdown("""
     <div style="text-align: center; color: #666; font-size: 0.9rem;">
         <p>📊 Data Source: UCI Machine Learning Repository - Online Retail II Dataset</p>
-        <p>Built with Streamlit • Part of the Data Analysis Portfolio Builder</p>
+        <p>Built with Streamlit • By Ashish Patel</p>
     </div>
     """, unsafe_allow_html=True)
 
