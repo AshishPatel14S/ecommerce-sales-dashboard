@@ -6,6 +6,8 @@ Analyze **£9.7M** in transactions to uncover **revenue drivers, seasonality, an
 
 ---
 
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://ecommerce-sales-dashboard-e9y4yllmwsai5xwagdyrgf.streamlit.app/)
+
 ## TL;DR
 
 - **What:** Interactive dashboard for sales performance + customer segmentation (RFM)
@@ -54,7 +56,7 @@ make demo
 
 ---
 
-## Three visuals (and what they mean)
+## Three visuals 
 
 ### 1) Seasonal revenue trend
 ![Seasonal Trend](docs/img/seasonal_trend.png)
@@ -78,16 +80,23 @@ make demo
 - **Source:** UCI Machine Learning Repository — *Online Retail II* (UK online retailer transactions)
 - **What’s in it:** Invoice‑level transactions (dates, product descriptions, quantities, prices, and customer IDs)
 - **Cleaning highlights:** removed cancellations/returns (negative quantities), handled missing customer IDs, and standardized timestamps
+- **More details:** docs/case_study.md
 
 ---
 
 ## Repo structure
+.
+├── demo/                # Streamlit app (entry: demo/app.py)
+├── src/                 # reusable modules (loading, preprocessing, metrics)
+├── notebooks/           # exploration + analysis notebooks
+├── docs/                # case study + demo gif + images
+├── data/
+│   ├── sample/          # sample dataset for quick runs
+│   ├── raw/             # raw dataset location (not committed)
+│   └── processed/       # processed outputs used by the app (optional/demo)
+├── Makefile
+└── requirements.txt
 
-- `demo/` — Streamlit app
-- `src/` — reusable modules (loading, preprocessing, metrics)
-- `notebooks/` — exploration and analysis notebooks
-- `docs/` — case study + images
-- `data/sample/` — small sample dataset for quick runs
 
 ---
 
@@ -97,14 +106,13 @@ Read the full write‑up here: **[`docs/case_study.md`](docs/case_study.md)**
 
 ---
 
-## How to talk about this project (30 seconds)
-
-“I built an interactive sales dashboard for a UK online retailer using Python, Pandas, Plotly, and Streamlit. The analysis shows a strong November revenue spike and that a small segment of customers drives most revenue. The dashboard helps with inventory planning, retention targeting, and market expansion decisions.”
-
----
-
-## Next improvements (optional)
+## Future Scope
 
 - Add a lightweight forecasting tab (naive baseline vs seasonal baseline) for planning
 - Add product category taxonomy (rule‑based or embedding clustering) for deeper merchandising insights
-- Deploy the Streamlit app (Streamlit Community Cloud) and link it on your GitHub profile
+
+## License
+
+MIT
+
+::contentReference[oaicite:0]{index=0}
