@@ -85,9 +85,11 @@ make demo
 ---
 
 ## Repo structure
+
+```text
 .
 ├── demo/                # Streamlit app (entry: demo/app.py)
-├── src/                 # reusable modules (loading, preprocessing, metrics)
+├── src/                 # preprocessing + analysis scripts
 ├── notebooks/           # exploration + analysis notebooks
 ├── docs/                # case study + demo gif + images
 ├── data/
@@ -96,6 +98,7 @@ make demo
 │   └── processed/       # processed outputs used by the app (optional/demo)
 ├── Makefile
 └── requirements.txt
+```
 
 
 ---
