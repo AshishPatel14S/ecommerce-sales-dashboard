@@ -209,68 +209,107 @@ def render_geographic_analysis(df: pd.DataFrame, metrics: dict):
         for _, row in intl.iterrows():
             st.markdown(f"• {row['Country']}: {format_currency(row['Revenue'])}")
 
-
 def render_customer_segments(df: pd.DataFrame):
     """Render RFM customer segmentation."""
     st.subheader("👥 Customer Segments (RFM Analysis)")
-    
-    # Calculate simple segmentation
-    customer_stats = df.groupby('Customer ID').agg({
-        'Revenue': 'sum',
-        'Invoice': 'nunique'
-    }).reset_index()
-    
-    # Create segments based on revenue quartiles
-    customer_stats['Segment'] = pd.qcut(
-        customer_stats['Revenue'],
-        q=4,
-        labels=['Low Value', 'Medium Value', 'High Value', 'Champions']
+
+    df = df.copy()
+    df["InvoiceDate"] = pd.to_datetime(df["InvoiceDate"], errors="coerce")
+
+    # RFM table (per customer)
+    snapshot_date = df["InvoiceDate"].max() + pd.Timedelta(days=1)
+
+    customer_stats = (
+        df.groupby("Customer ID")
+        .agg(
+            Recency=("InvoiceDate", lambda x: (snapshot_date - x.max()).days),
+            Frequency=("Invoice", "nunique"),
+            Monetary=("Revenue", "sum"),
+        )
+        .reset_index()
     )
-    
-    segment_summary = customer_stats.groupby('Segment').agg({
-        'Customer ID': 'count',
-        'Revenue': 'sum'
+
+    # R/F/M scores (1–5)
+    customer_stats["R_Score"] = pd.qcut(
+        customer_stats["Recency"], 5, labels=[5, 4, 3, 2, 1]
+    ).astype(int)
+
+    customer_stats["F_Score"] = pd.qcut(
+        customer_stats["Frequency"].rank(method="first"), 5, labels=[1, 2, 3, 4, 5]
+    ).astype(int)
+
+    customer_stats["M_Score"] = pd.qcut(
+        customer_stats["Monetary"], 5, labels=[1, 2, 3, 4, 5]
+    ).astype(int)
+
+    # Segment rules (not equal-sized → realistic)
+    def rfm_segment(row):
+        r, f, m = row["R_Score"], row["F_Score"], row["M_Score"]
+        if (r >= 4) and (f >= 4) and (m >= 4):
+            return "Champions"
+        if (r >= 3) and (f >= 4) and (m >= 3):
+            return "Loyal"
+        if (r >= 4) and (f <= 2):
+            return "New Customers"
+        if (r == 3) and (f >= 3) and (m >= 3):
+            return "Potential Loyalists"
+        if (r <= 2) and (f >= 3):
+            return "At Risk"
+        if (r <= 2) and (f <= 2):
+            return "Hibernating"
+        return "Need Attention"
+
+    customer_stats["Segment"] = customer_stats.apply(rfm_segment, axis=1)
+
+    # Keep the rest of your plotting logic the same (Customers + Revenue)
+    segment_summary = customer_stats.groupby("Segment").agg({
+        "Customer ID": "count",
+        "Monetary": "sum"
     }).reset_index()
-    segment_summary.columns = ['Segment', 'Customers', 'Revenue']
-    
+    segment_summary.columns = ["Segment", "Customers", "Revenue"]
+
     col1, col2 = st.columns(2)
-    
+
     with col1:
         fig = px.bar(
             segment_summary,
-            x='Segment',
-            y='Customers',
-            title='Customers by Segment',
-            color='Segment',
+            x="Segment",
+            y="Customers",
+            title="Customers by Segment",
+            color="Segment",
             color_discrete_sequence=px.colors.sequential.Blues_r
         )
         fig.update_layout(showlegend=False, height=350)
         st.plotly_chart(fig, use_container_width=True)
-    
+
     with col2:
         fig = px.bar(
             segment_summary,
-            x='Segment',
-            y='Revenue',
-            title='Revenue by Segment',
-            color='Segment',
+            x="Segment",
+            y="Revenue",
+            title="Revenue by Segment",
+            color="Segment",
             color_discrete_sequence=px.colors.sequential.Oranges_r
         )
         fig.update_layout(showlegend=False, height=350)
         st.plotly_chart(fig, use_container_width=True)
-    
-    # Insight
-    champions = segment_summary[segment_summary['Segment'] == 'Champions'].iloc[0]
-    total_rev = segment_summary['Revenue'].sum()
-    champ_pct = champions['Revenue'] / total_rev * 100
-    
+
+    # Insight (no "top 25%" claim anymore)
+    total_rev = segment_summary["Revenue"].sum()
+    champions_rev = segment_summary.loc[segment_summary["Segment"] == "Champions", "Revenue"].sum()
+    champions_cnt = segment_summary.loc[segment_summary["Segment"] == "Champions", "Customers"].sum()
+    total_cnt = segment_summary["Customers"].sum()
+
+    champ_rev_pct = (champions_rev / total_rev * 100) if total_rev else 0
+    champ_cnt_pct = (champions_cnt / total_cnt * 100) if total_cnt else 0
+
     st.markdown(f"""
     <div class="insight-box">
-        <strong>💡 Insight:</strong> The top 25% of customers ("Champions") generate 
-        <strong>{champ_pct:.0f}%</strong> of total revenue. 
-        Focus retention efforts on this segment.
+        <strong>💡 Insight:</strong> <strong>Champions</strong> are ~<strong>{champ_cnt_pct:.0f}%</strong> of customers and generate
+        ~<strong>{champ_rev_pct:.0f}%</strong> of total revenue. Focus retention efforts on this segment.
     </div>
     """, unsafe_allow_html=True)
+
 
 
 def render_time_patterns(df: pd.DataFrame, metrics: dict):
