@@ -1,6 +1,8 @@
 # Data files (keep sample, ignore raw and large processed)
 data/raw/
 data/processed/*.csv
+!data/processed/cleaned_transactions.csv
+!data/processed/customer_rfm.csv
 !data/sample/
 
 # Python
