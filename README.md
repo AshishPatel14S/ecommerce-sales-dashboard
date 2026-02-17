@@ -66,7 +66,7 @@ make demo
 ### 2) Customer segmentation (RFM)
 ![Customer Segments](docs/img/customer_segments.png)
 
-**Takeaway:** A relatively small group of customers accounts for a large share of revenue → prioritize retention and targeted offers.
+**Takeaway:** Clear separation between low-value vs high-value segments; Champions contribute a disproportionate share of revenue → prioritize retention/upsell for this group.
 
 ### 3) Geographic performance
 ![Geographic](docs/img/geographic.png)
