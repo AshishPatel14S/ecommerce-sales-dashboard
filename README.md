@@ -2,8 +2,6 @@
 
 Analyze **£9.7M** in transactions to uncover **revenue drivers, seasonality, and high‑value customer segments** for a UK online retailer — packaged as an interactive **Streamlit dashboard**.
 
-![Dashboard Demo](docs/demo.gif)
-
 ---
 
 [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://ecommerce-sales-dashboard-e9y4yllmwsai5xwagdyrgf.streamlit.app/)
