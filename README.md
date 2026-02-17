@@ -53,10 +53,11 @@ make demo
 2. **Geography:** Which countries contribute most revenue? Where is growth potential?
 3. **Products:** What items are the top sellers (by revenue/volume)?
 4. **Customer value:** Who are the highest‑value customers and how concentrated is revenue?
+4. **Retention:** Do customers come back after their first purchase? How fast do cohorts drop?
 
 ---
 
-## Three visuals 
+## Four visuals 
 
 ### 1) Seasonal revenue trend
 ![Seasonal Trend](docs/img/seasonal_trend.png)
@@ -74,7 +75,7 @@ make demo
 **Takeaway:** International revenue is uneven → focus expansion/activation on the strongest non‑UK markets.
 
 ### 4) Cohort Retention
-![Cohort Retention](doc/img/cohort_retention.png)
+![Cohort Retention](docs/img/cohort_retention.png)
 
 **Takeaway:** Month-1 retention averages **~10.9%**, and most cohorts drop sharply after the first purchase — improving the **first 30-day repeat** rate is the highest-impact lever for growth.
 
