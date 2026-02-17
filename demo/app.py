@@ -360,6 +360,78 @@ def render_time_patterns(df: pd.DataFrame, metrics: dict):
     </div>
     """, unsafe_allow_html=True)
 
+def render_cohort_retention(df: pd.DataFrame):
+    """Render cohort retention heatmap (monthly)."""
+    st.subheader("🧊 Cohort Retention (Monthly)")
+
+    d = df.copy()
+    d["InvoiceDate"] = pd.to_datetime(d["InvoiceDate"], errors="coerce")
+    d = d.dropna(subset=["Customer ID", "InvoiceDate"])
+
+    # Cohort month = first purchase month per customer
+    first_purchase = (
+        d.groupby("Customer ID")["InvoiceDate"]
+        .min()
+        .reset_index()
+        .rename(columns={"InvoiceDate": "CohortDate"})
+    )
+    first_purchase["Cohort"] = first_purchase["CohortDate"].dt.to_period("M")
+
+    d["TransactionMonth"] = d["InvoiceDate"].dt.to_period("M")
+    d = d.merge(first_purchase[["Customer ID", "Cohort"]], on="Customer ID", how="left")
+
+    # Months since first purchase
+    d["CohortAge"] = (d["TransactionMonth"] - d["Cohort"]).apply(lambda x: x.n)
+
+    # Count active customers by cohort + age
+    cohort_counts = (
+        d.groupby(["Cohort", "CohortAge"])["Customer ID"]
+        .nunique()
+        .reset_index(name="Customers")
+    )
+
+    # Pivot to matrix
+    retention_matrix = (
+        cohort_counts.pivot(index="Cohort", columns="CohortAge", values="Customers")
+        .fillna(0)
+        .sort_index()
+    )
+
+    # Convert to retention % (divide by month 0)
+    if 0 not in retention_matrix.columns:
+        st.info("Not enough data to compute cohort retention (missing cohort month 0).")
+        return
+
+    cohort_size = retention_matrix[0].replace(0, pd.NA)
+    retention_pct = (retention_matrix.divide(cohort_size, axis=0) * 100).fillna(0).round(1)
+
+    # Keep first N months so the chart stays readable
+    max_months = min(12, retention_pct.shape[1])
+    retention_pct = retention_pct.iloc[:, :max_months]
+
+    # Make labels nicer
+    retention_pct.index = retention_pct.index.astype(str)
+
+    # Quick KPI
+    avg_m1 = float(retention_pct[1].mean()) if 1 in retention_pct.columns else 0.0
+    c1, c2, c3 = st.columns(3)
+    c1.metric("Cohorts", int(retention_pct.shape[0]))
+    c2.metric("Months tracked", int(retention_pct.shape[1] - 1))
+    c3.metric("Avg Month-1 Retention", f"{avg_m1:.1f}%")
+
+    # Heatmap
+    fig = px.imshow(
+        retention_pct,
+        text_auto=True,
+        aspect="auto",
+        labels=dict(x="Months Since First Purchase", y="Cohort (First Purchase Month)", color="Retention %"),
+        title="Customer Retention by Cohort (%)"
+    )
+    fig.update_layout(height=520)
+    st.plotly_chart(fig, use_container_width=True)
+
+    st.caption("Retention = % of customers in each cohort who purchased again after N months.")
+
 
 def render_top_products(df: pd.DataFrame):
     """Render top products analysis."""
@@ -477,6 +549,10 @@ def main():
     st.markdown("---")
     
     render_time_patterns(filtered_df, metrics)
+
+    st.markdown("---")
+    render_cohort_retention(filtered_df)
+
     
     # Footer
     st.markdown("---")
