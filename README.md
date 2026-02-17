@@ -73,6 +73,12 @@ make demo
 
 **Takeaway:** International revenue is uneven → focus expansion/activation on the strongest non‑UK markets.
 
+### 4) Cohort Retention
+![Cohort Retention](doc/img/cohort_retention.png)
+
+**Takeaway:** Month-1 retention averages **~10.9%**, and most cohorts drop sharply after the first purchase — improving the **first 30-day repeat** rate is the highest-impact lever for growth.
+
+
 ---
 
 ## Data provenance & notes
