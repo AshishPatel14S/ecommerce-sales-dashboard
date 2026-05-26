@@ -93,6 +93,6 @@ With more time, I would:
 
 ---
 
-**Code:** [GitHub Repository Link]  
-**Demo:** [Live Dashboard Link]  
-**Contact:** [Your Email]
+**Code:** [GitHub Repository](https://github.com/AshishPatel14S/ecommerce-sales-dashboard)  
+**Demo:** [Live Dashboard](https://ecommerce-sales-dashboard-e9y4yllmwsai5xwagdyrgf.streamlit.app/)  
+**Contact:** ashishpatelap1403@gmail.com

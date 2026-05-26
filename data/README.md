@@ -9,7 +9,7 @@
 | **Name** | Online Retail II |
 | **Source** | UCI Machine Learning Repository |
 | **URL** | https://archive.ics.uci.edu/dataset/502/online+retail+ii |
-| **Download Date** | [Your download date] |
+| **Download Date** | December 2009 – December 2011 (dataset period) |
 | **License** | CC BY 4.0 |
 | **Citation** | Daqing Chen, Sai Laing Sain, and Kun Guo (2012). Data mining for the online retail industry. Journal of Database Marketing & Customer Strategy Management. |
 
