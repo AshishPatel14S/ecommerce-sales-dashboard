@@ -248,7 +248,7 @@ def render_customer_segments(df: pd.DataFrame):
         if (r >= 4) and (f >= 4) and (m >= 4):
             return "Champions"
         if (r >= 3) and (f >= 4) and (m >= 3):
-            return "Loyal"
+            return "Loyal Customers"
         if (r >= 4) and (f <= 2):
             return "New Customers"
         if (r == 3) and (f >= 3) and (m >= 3):
@@ -256,7 +256,7 @@ def render_customer_segments(df: pd.DataFrame):
         if (r <= 2) and (f >= 3):
             return "At Risk"
         if (r <= 2) and (f <= 2):
-            return "Hibernating"
+            return "Lost"
         return "Need Attention"
 
     customer_stats["Segment"] = customer_stats.apply(rfm_segment, axis=1)
