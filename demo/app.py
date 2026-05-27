@@ -144,7 +144,7 @@ def render_revenue_trend(df: pd.DataFrame):
     <div class="insight-box">
         <strong>💡 Insight:</strong> Peak revenue was in <strong>{peak_month['YearMonth']}</strong> 
         with <strong>{format_currency(peak_month['Revenue'])}</strong>. 
-        November consistently shows 2-3x higher sales due to holiday shopping.
+        Peak revenue occurs in November, highlighting a clear holiday-season uplift.
     </div>
     """, unsafe_allow_html=True)
 

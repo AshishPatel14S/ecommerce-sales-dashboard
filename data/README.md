@@ -61,11 +61,11 @@ The `sample_data.csv` file is a synthetic dataset that mimics the structure and 
 - Demo purposes
 
 ### Sample Data Statistics
-- 7,143 transactions
+- 7,102 transactions
 - 2,000 invoices
-- 452 customers
+- 455 customers
 - 19 countries
-- Total revenue: £184,598.22
+- Total revenue: £181,890.15
 
 ### Important Note
 **The sample data is synthetically generated** and should not be used for actual business analysis. For real analysis, download the original UCI dataset.
