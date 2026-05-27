@@ -139,7 +139,11 @@ def generate_invoice_date():
     hour = np.random.choice(range(24), p=hour_weights)
     minute = random.randint(0, 59)
     
-    return date.replace(hour=hour, minute=minute)
+    timestamp = date.replace(hour=hour, minute=minute)
+    # Clamp to END_DATE
+    if timestamp > END_DATE:
+        timestamp = END_DATE - timedelta(hours=np.random.uniform(1, 24))
+    return timestamp
 
 def generate_sample_data():
     """Generate the complete sample dataset."""

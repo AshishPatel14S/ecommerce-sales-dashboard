@@ -38,6 +38,8 @@ Without these insights, the company risked overstocking unpopular items, missing
 - 5,942 unique customers across 38 countries
 - Dec 2009 – Dec 2011
 
+> *Note: Findings above are from the full UCI dataset. The GitHub repo includes a synthetic sample for quick demo — sample results will differ from these full-dataset numbers.*
+
 **Methods:**
 - Data cleaning (removed cancellations, nulls, outliers)
 - RFM segmentation (Recency, Frequency, Monetary analysis)
@@ -54,8 +56,8 @@ Without these insights, the company risked overstocking unpopular items, missing
 |--------|---------|-----------------|
 | Seasonality | November = 3x average revenue | Increase inventory 40% by October |
 | Customer Value | Top 20% → 78% of revenue | Launch VIP loyalty program |
-| Geographic | UK = 82%, Germany growing 15% YoY | Invest in EU fulfillment |
-| Timing | Peak: Thursday at 12:00 | Schedule campaigns around peaks |
+| Geographic | UK = 82% of revenue; secondary EU markets show growth potential | Invest in EU fulfillment |
+| Timing | Weekday peaks with mid-morning concentration | Schedule campaigns around peak periods |
 
 **Key Visualization:**
 
@@ -70,7 +72,7 @@ Without these insights, the company risked overstocking unpopular items, missing
 1. **Inventory Planning:** Pre-stock 40% additional inventory by mid-October for holiday season
 2. **Customer Retention:** Create tiered loyalty program; prioritize "Champions" segment with exclusive offers
 3. **Market Expansion:** Test dedicated marketing in Germany/France; evaluate EU distribution center ROI
-4. **Operational Efficiency:** Align staffing and marketing spend with Thursday peak periods
+4. **Operational Efficiency:** Align staffing and marketing spend with identified weekday peak periods
 
 ---
 

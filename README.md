@@ -12,6 +12,8 @@ Analyze **£9.7M** in transactions to uncover **revenue drivers, seasonality, an
 - **Key insights:** November revenue spikes ~3× (holiday season) and the top ~20% of customers drive ~78% of revenue
 - **Stack:** Python, Pandas, Plotly, Streamlit
 
+> **Note on data:** Headline findings (£9.7M, 541K transactions, 5,942 customers) are derived from the full UCI Online Retail II dataset. The GitHub repo includes a synthetic sample for quick demo purposes — results from the sample will differ from the full-dataset numbers shown in the case study and README.
+
 ---
 
 ## Quickstart (5 minutes)
@@ -51,7 +53,7 @@ make demo
 2. **Geography:** Which countries contribute most revenue? Where is growth potential?
 3. **Products:** What items are the top sellers (by revenue/volume)?
 4. **Customer value:** Who are the highest‑value customers and how concentrated is revenue?
-4. **Retention:** Do customers come back after their first purchase? How fast do cohorts drop?
+5. **Retention:** Do customers come back after their first purchase? How fast do cohorts drop?
 
 ---
 

@@ -57,7 +57,8 @@ def calculate_customer_metrics(df: pd.DataFrame) -> Dict:
     
     # Average order value per customer
     customer_stats['AOV'] = customer_stats['TotalSpend'] / customer_stats['OrderCount']
-    
+    # True order-level AOV (not per-customer average)
+
     return {
         'total_customers': total_customers,
         'repeat_customers': repeat_customers,
@@ -65,7 +66,7 @@ def calculate_customer_metrics(df: pd.DataFrame) -> Dict:
         'avg_customer_value': customer_stats['TotalSpend'].mean(),
         'median_customer_value': customer_stats['TotalSpend'].median(),
         'avg_orders_per_customer': customer_stats['OrderCount'].mean(),
-        'avg_aov': customer_stats['AOV'].mean(),
+        'avg_aov': df.groupby('Invoice')['Revenue'].sum().mean(),
         'customer_data': customer_stats
     }
 

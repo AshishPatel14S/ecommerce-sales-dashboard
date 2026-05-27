@@ -70,44 +70,62 @@ def create_monthly_revenue_chart(df, save_path):
 
 
 def create_customer_segments_chart(df, save_path):
-    """Create and save customer segmentation chart."""
-    # Simple segmentation based on revenue quartiles
-    customer_stats = df.groupby('Customer ID')['Revenue'].sum().reset_index()
-    customer_stats['Segment'] = pd.qcut(
-        customer_stats['Revenue'], 
-        q=4, 
-        labels=['Low Value', 'Medium Value', 'High Value', 'Champions']
-    )
-    
-    segment_summary = customer_stats.groupby('Segment').agg({
-        'Customer ID': 'count',
-        'Revenue': 'sum'
-    }).reset_index()
-    segment_summary.columns = ['Segment', 'Customers', 'Revenue']
-    
+    """Create and save customer segmentation chart using proper RFM scoring."""
+    reference_date = df['InvoiceDate'].max() + pd.Timedelta(days=1)
+
+    customer_stats = df.groupby('Customer ID').agg(
+        Recency=('InvoiceDate', lambda x: (reference_date - x.max()).days),
+        Frequency=('Invoice', 'nunique'),
+        Monetary=('Revenue', 'sum')
+    ).reset_index()
+
+    customer_stats['R_Score'] = pd.qcut(customer_stats['Recency'], q=5, labels=[5,4,3,2,1])
+    customer_stats['F_Score'] = pd.qcut(customer_stats['Frequency'].rank(method='first'), q=5, labels=[1,2,3,4,5])
+    customer_stats['M_Score'] = pd.qcut(customer_stats['Monetary'].rank(method='first'), q=5, labels=[1,2,3,4,5])
+
+    def segment_customer(row):
+        r, f, m = int(row['R_Score']), int(row['F_Score']), int(row['M_Score'])
+        if r >= 4 and f >= 4 and m >= 4:
+            return 'Champions'
+        elif r >= 3 and f >= 3 and m >= 3:
+            return 'Loyal Customers'
+        elif r >= 4 and f <= 2:
+            return 'New Customers'
+        elif r <= 2 and f >= 3 and m >= 3:
+            return 'At Risk'
+        elif r <= 2 and f <= 2:
+            return 'Lost'
+        else:
+            return 'Potential Loyalists'
+
+    customer_stats['Segment'] = customer_stats.apply(segment_customer, axis=1)
+
+    segment_summary = customer_stats.groupby('Segment').agg(
+        Customers=('Customer ID', 'count'),
+        Revenue=('Monetary', 'sum')
+    ).reset_index()
+
     fig, axes = plt.subplots(1, 2, figsize=(14, 5))
-    
-    # Customers by segment
-    colors = plt.cm.Blues(np.linspace(0.3, 0.9, 4))
+
+    colors = plt.cm.Blues(np.linspace(0.3, 0.9, len(segment_summary)))
     axes[0].bar(segment_summary['Segment'], segment_summary['Customers'], color=colors)
     axes[0].set_xlabel('Segment', fontsize=12)
     axes[0].set_ylabel('Number of Customers', fontsize=12)
-    axes[0].set_title('Customers by Segment', fontsize=14, fontweight='bold')
+    axes[0].set_title('Customers by RFM Segment', fontsize=14, fontweight='bold')
     axes[0].tick_params(axis='x', rotation=15)
-    
-    # Revenue by segment
-    colors = plt.cm.Oranges(np.linspace(0.3, 0.9, 4))
+
+    colors = plt.cm.Oranges(np.linspace(0.3, 0.9, len(segment_summary)))
     axes[1].bar(segment_summary['Segment'], segment_summary['Revenue'], color=colors)
     axes[1].set_xlabel('Segment', fontsize=12)
     axes[1].set_ylabel('Revenue (£)', fontsize=12)
-    axes[1].set_title('Revenue by Segment', fontsize=14, fontweight='bold')
+    axes[1].set_title('Revenue by RFM Segment', fontsize=14, fontweight='bold')
     axes[1].tick_params(axis='x', rotation=15)
-    
+
     plt.tight_layout()
     plt.savefig(save_path, dpi=150, bbox_inches='tight')
     plt.close()
     print(f"   Saved: {save_path}")
-    
+
     return segment_summary
 
 

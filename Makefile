@@ -17,7 +17,7 @@ demo:
 
 # Run on bundled sample data (fastest path for reviewers)
 sample: setup
-	python src/preprocessing.py --sample
+	python data/sample/generate_sample.py
 	streamlit run demo/app.py
 
 # Clean generated files
